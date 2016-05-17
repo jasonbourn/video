@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>高手之路</title>
+		<link rel="stylesheet" type="text/css" href="../res/aui/aui.css" />
+		<style>
+			.btn div {
+				border: 1px solid #ccc;
+				margin: 10px;
+				padding-left:10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="width: 100%; height: 220px;">
+			<script type="text/javascript" src="../res/player/sewise.player.min.js"></script>
+			<script type="text/javascript">
+				SewisePlayer.setup({
+					logo : 'http://www.apicloud.com/img/logo.png', // 默认播放右上交角的logo，比如搜狐视频，腾讯视频的logo
+					poster : '../image/first.png',
+					server : "vod",
+					type : "mp4",
+					videourl : "../res/xml.mp4",
+					skin : "vodFoream",
+					title : "小毛驴",
+					volume : "0.5", // 默认音量
+					lang : 'zh_CN',
+					fallbackurls : {
+						ogg : "http://jackzhang1204.github.io/materials/mov_bbb.ogg",
+						webm : "http://jackzhang1204.github.io/materials/mov_bbb.webm"
+					},
+					claritybutton : "disable"
+				});
+			</script>
+		</div>
+		<script>
+			// 默认音量
+			var defaultVolume = 0.5;
+			//点播接口调用方法
+			function startPlay() {
+				SewisePlayer.doPlay();
+			}
+
+			function playPause() {
+				SewisePlayer.doPause();
+			}
+
+			// 跳转到第10秒处
+			function seekTo() {
+				SewisePlayer.doSeek(10);
+			}
+
+			// 快进
+			function forwark() {
+				var cur = SewisePlayer.playTime();
+				SewisePlayer.doSeek(cur + 10);
+			}
+
+			// 后退
+			function backto() {
+				var cur = SewisePlayer.playTime();
+				SewisePlayer.doSeek(cur - 10);
+			}
+
+			function playStop() {
+				SewisePlayer.doStop();
+			}
+
+			function changeVolumnStyle(num) {
+				var percen = (num / 1);
+				var _sewiseObj = new SewisePlayerSkin.ElementObject;
+				var $point = $(_sewiseObj.$volumelinePoint.selector);
+				var $dragger = $(_sewiseObj.$volumelineDragger.selector);
+				var $linev = $(_sewiseObj.$volumelineVolume.selector);
+				var pointW = $point.width();
+				var draggerW = $dragger.width() - 1;
+				var linevW = $linev.width();
+				$linev.css("width", Math.floor(draggerW * percen));
+				$point.css("left", Math.floor(draggerW * percen) - (pointW / 2));
+			}
+
+			//增大音量
+			function addVolume() {
+				defaultVolume += 0.1;
+				if (defaultVolume <= 1) {
+					changeVolumnStyle(defaultVolume);
+					SewisePlayer.setVolume(defaultVolume);
+				} else {
+					defaultVolume = 1;
+				}
+			}
+
+			// 减小音量
+			function downVolume() {
+				defaultVolume -= 0.1;
+				if (defaultVolume >= 0) {
+					changeVolumnStyle(defaultVolume);
+					SewisePlayer.setVolume(defaultVolume);
+				} else {
+					defaultVolume = 0;
+				}
+			}
+
+			// 静音
+			function noVolume() {
+				changeVolumnStyle(0);
+				SewisePlayer.setVolume(0);
+			}
+
+			// 增加音量到最大
+			function bigVolume() {
+				changeVolumnStyle(1);
+				SewisePlayer.setVolume(1);
+			}
+
+			// 获取视频总时间
+			function getDuration() {
+				alert(SewisePlayer.duration());
+			}
+
+			// 获取当前播放时间
+			function getPlayTime() {
+				alert(SewisePlayer.playTime());
+			}
+
+			//切换视频
+			function switchVideo() {
+				SewisePlayer.toPlay("http://www.winu.net/a.mp4", ".NET视频教程", 0, true);
+			}
+
+			// 全屏
+			function toFullScreen() {
+				SewisePlayer.fullScreen();
+			}
+
+			// 正常屏
+			function toNoramlScreen() {
+				SewisePlayer.noramlScreen();
+			}
+
+			// 获取缓冲进度
+			function getBufferProgress() {
+				alert(SewisePlayer.bufferProgress());
+			}
+
+			//播放器回调方法
+			function playerReady(name) {
+				console.log("Sewise Player On Ready 1");
+				//SewisePlayer.toPlay("http://www.w3school.com.cn/i/movie.mp4", "title", 0, false);
+			}
+
+
+			SewisePlayer.playerReady(function(name) {
+				console.log("Sewise Player On Ready 2");
+			});
+			function onStart(name) {
+				console.log("onStart 1");
+			}
+
+
+			SewisePlayer.onStart(function(name) {
+				console.log("onStart 2");
+			});
+			function onStop(name) {
+				console.log("onStop 1");
+			}
+
+
+			SewisePlayer.onStop(function(name) {
+				console.log("onStop 2");
+			});
+			function onMetadata(meta, name) {
+				console.log("onMetadata 1");
+			}
+
+
+			SewisePlayer.onMetadata(function(meta, name) {
+				console.log("onMetadata 2");
+			});
+			function onClarity(clarity, name) {
+				console.log("onClarity 1");
+			}
+
+
+			SewisePlayer.onClarity(function(clarity, name) {
+				console.log("onClarity 2");
+			});
+			function onPause(name) {
+				console.log("onPause 1");
+			}
+
+
+			SewisePlayer.onPause(function(name) {
+				console.log("onPause 2");
+			});
+			function onSeek(time, name) {
+				console.log("onSeek 1: " + time);
+			}
+
+
+			SewisePlayer.onSeek(function(time, name) {
+				console.log("onSeek 2: " + time);
+			});
+			function onPlayTime(time, name) {
+				console.log("onPlayTime 1: " + time);
+			}
+
+
+			SewisePlayer.onPlayTime(function(time, name) {
+				console.log("onPlayTime 2: " + time);
+			});
+			function onBuffer(pt, name) {
+				console.log("onBuffer 1: " + pt);
+			}
+
+
+			SewisePlayer.onBuffer(function(pt, name) {
+				console.log("onBuffer 2: " + pt);
+			});
+			// 全屏回调函数
+			function onFullScreen() {
+				api.setScreenOrientation({
+					orientation : 'auto'
+				});
+			};
+			// 退出全屏回调函数
+			function onNoramlScreen() {
+				api.setScreenOrientation({
+					orientation : 'portrait_up'
+				});
+			}
+		</script>
+		<div style="padding-top: 20px;" class="btn">
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:startPlay();">播放</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:playPause();">暂停</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:seekTo();">跳转到第10秒</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:forwark();">快进</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:backto();">回退</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:playStop();">停止</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:addVolume();">增加音量</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:downVolume();">减小音量</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:noVolume();">静音</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:bigVolume();">最大音量</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:getDuration();">获取总时长</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:getPlayTime();">获取当前时间</a>
+			</div>
+			<!-- <div style="padding-right: 20px;float: left;"><a href="javascript:switchProgram();">切换节目</a></div> -->
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:switchVideo();">切换视频</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:toFullScreen();">全屏</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:toNoramlScreen();">普屏</a>
+			</div>
+			<div style="padding-right: 20px;float: left;">
+				<a href="javascript:getBufferProgress();">缓冲进度</a>
+			</div>
+			<br clear="all"/>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+		};
+	</script>
+</html>
